@@ -43,8 +43,7 @@
             android:background="@drawable/ic_action_send"
             android:backgroundTint="@color/purple_700"
             android:layout_weight="1"
-            android:padding="18dp"
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginLeft="10dp"/>
     </LinearLayout>
 
 
