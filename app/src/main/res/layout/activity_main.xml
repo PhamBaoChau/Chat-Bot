@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,37 +14,65 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/layout_text"/>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:orientation="horizontal"
-        android:weightSum="10"
-        android:gravity="bottom">
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/account1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:padding="5dp"
+            android:text="1"
+            android:textSize="16dp"
+            android:drawableLeft="@drawable/ic_action_account"
+            android:drawableTint="@color/purple_500"/>
+        <TextView
+            android:id="@+id/account2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="2"
+            android:textSize="16dp"
+            android:drawableLeft="@drawable/ic_action_account"
+            android:drawableTint="@color/purple_500"
+            android:padding="5dp"
+            android:visibility="invisible"/>
 
         <EditText
             android:id="@+id/edtText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="9"
             android:background="@drawable/shape_edit_text"
             android:minHeight="40dp"
             android:singleLine="true"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:hint="@string/texting"/>
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:hint="@string/texting"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/account1"
+            app:layout_constraintEnd_toStartOf="@id/btnSend"/>
 
         <ImageButton
             android:id="@+id/btnSend"
-            android:layout_width="0dp"
+            android:layout_width="30dp"
             android:layout_height="match_parent"
             android:background="@drawable/ic_action_send"
             android:backgroundTint="@color/purple_700"
-            android:layout_weight="1"
-            android:layout_marginLeft="10dp"/>
-    </LinearLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

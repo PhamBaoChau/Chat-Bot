@@ -1,14 +1,12 @@
 package com.baochau.dmt.chat;
 
 
-import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.baochau.dmt.chat.Model.ItemChat;
 
@@ -16,9 +14,11 @@ import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.DateViewHolder> {
     List<ItemChat> chats;
+    int idAccount;
 
-    public ChatAdapter(List<ItemChat> chats) {
+    public ChatAdapter(List<ItemChat> chats, int idAccount) {
         this.chats = chats;
+        this.idAccount = idAccount;
     }
 
     @Override
@@ -30,14 +30,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.DateViewHolder
     @Override
     public void onBindViewHolder(DateViewHolder holder, int position) {
         ItemChat item = chats.get(position);
-        if (item.idSender == 1 && item.idReceiver == 2) {
+        holder.tvLeft.setVisibility(View.GONE);
+        holder.tvRight.setVisibility(View.GONE);
+
+        if (item.idSender == idAccount) {
             holder.tvRight.setText(item.content);
             holder.tvRight.setVisibility(View.VISIBLE);
         } else {
             holder.tvLeft.setText(item.content);
             holder.tvLeft.setVisibility(View.VISIBLE);
         }
-
     }
 
     @Override
