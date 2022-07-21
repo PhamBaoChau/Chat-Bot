@@ -1,11 +1,13 @@
 package com.baochau.dmt.chat;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -20,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     public static final String ID_ACCOUNT = "idAccount";
     public static final String ID_RECEIVER = "idReceiver";
     EditText edtChat;
@@ -42,14 +44,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-        displayListChat();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference mRef = database.getReference("chats");
+        getIddItemChat(mRef);
+        displayListChat(mRef);
         acc1.setOnClickListener(this);
         acc2.setOnClickListener(this);
-        sendMessage();
+        sendMessage(mRef);
     }
 
-    void displayListChat() {
-        fmChat = new FragmentChat();
+    void displayListChat(DatabaseReference mRef) {
+        fmChat = new FragmentChat(mRef);
         Bundle bundle = new Bundle();
         bundle.putInt(ID_ACCOUNT, idAccount);
         bundle.putInt(ID_RECEIVER, idReceiver);
@@ -58,33 +63,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         manager.replace(R.id.layout_chat_content, fmChat).commit();
     }
 
-    void sendMessage() {
+    void sendMessage(DatabaseReference mRef) {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setData();
+                addNewItemChat(mRef);
                 edtChat.setText(null);
             }
         });
     }
 
-    void setData() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference mRef = database.getReference("chats");
-        createItemChat(mRef);
+    void addNewItemChat(DatabaseReference mRef) {
+        String send="Đã gửi";
         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm dd/MM/yy");
         String time = dateFormat.format(Calendar.getInstance().getTime());
         String sContent = edtChat.getText().toString().trim();
-
-        itemChat = new ItemChat(idItemChat, idAccount, idReceiver, time, sContent);
-        mRef.child(String.valueOf(idItemChat)).setValue(itemChat);
+        if (!sContent.isEmpty()){
+            itemChat = new ItemChat(idItemChat, idAccount, idReceiver, time, sContent,send);
+            mRef.child(String.valueOf(idItemChat)).setValue(itemChat);
+        }
     }
 
-    void createItemChat(DatabaseReference mRef) {
+    void getIddItemChat(DatabaseReference mRef) {
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                idItemChat = (int) dataSnapshot.getChildrenCount();
+                idItemChat= (int) dataSnapshot.getChildrenCount();
             }
 
             @Override
@@ -105,6 +109,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             idAccount = 1;
             idReceiver = 2;
         }
-        displayListChat();
+        displayListChat(fmChat.mRef);
     }
 }

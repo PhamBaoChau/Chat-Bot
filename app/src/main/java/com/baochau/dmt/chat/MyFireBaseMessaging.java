@@ -40,13 +40,13 @@ public class MyFireBaseMessaging extends FirebaseMessagingService {
 
     private void sendMessage(String title, String content) {
         Intent intent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent =PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
         NotificationCompat.Builder notificationBuider = new NotificationCompat.Builder(this, channelId)
                 .setContentTitle(title)
                 .setContentText(content);
 
-        Notification notification=notificationBuider.build();
+        Notification notification = notificationBuider.build();
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

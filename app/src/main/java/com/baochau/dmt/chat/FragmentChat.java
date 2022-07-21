@@ -23,6 +23,11 @@ public class FragmentChat extends Fragment {
     RecyclerView recyclerView;
     ChatAdapter adapter;
     List<ItemChat> chatList;
+    DatabaseReference mRef;
+
+    public FragmentChat(DatabaseReference mRef) {
+        this.mRef = mRef;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,16 +43,15 @@ public class FragmentChat extends Fragment {
         Bundle bundle = getArguments();
         int idAccount = bundle.getInt(MainActivity.ID_ACCOUNT);
         int idReceiver = bundle.getInt(MainActivity.ID_RECEIVER);
-        getData(idAccount, idReceiver);
 
-        adapter = new ChatAdapter(chatList, idAccount);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager lout =new LinearLayoutManager(getContext());
+        getData(idAccount, idReceiver,mRef,lout);
+        adapter = new ChatAdapter(chatList, idAccount,idReceiver,mRef);
+        recyclerView.setLayoutManager(lout);
         recyclerView.setAdapter(adapter);
     }
 
-    public void getData(int idAccount, int idReceiver) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference mRef = database.getReference("chats");
+    void getData(int idAccount, int idReceiver,DatabaseReference mRef,LinearLayoutManager lout) {
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -60,6 +64,8 @@ public class FragmentChat extends Fragment {
                     }
                 }
                 adapter.notifyDataSetChanged();
+                lout.setStackFromEnd(true);
+                lout.scrollToPosition(adapter.getItemCount()-1);
             }
 
             @Override
